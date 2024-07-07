@@ -1,8 +1,3 @@
-# はじめに
-
-とあるプロジェクトに参画した時に、テストアプリ配布を全て手動で行なっており、テストフェーズに入った時に、非効率すぎてめちゃめちゃストレスになりました...
-自動化したいなと思い、とりあえず無料で手っ取り早くできるものを模索した結果、fastlane と firebase app distribution を使用してテストアプリを配布を効率化することにしました。
-
 # 事前準備
 
 - テストアプリ配布用の Bundle Identifier
@@ -215,9 +210,3 @@ fastlane ios deploy
 cd android
 fastlane android deploy
 ```
-
-# 最後に
-コマンドからテストアプリの自動化をしてみたい方はぜひやって見てください！
-また、build numberを自動でインクリメントしたりなど、色々カスタマイズができるので、好みの形に実装するのがいいかと思います。
-
-# fastlane_deploy_to_app_distribution
