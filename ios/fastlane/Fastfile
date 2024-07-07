@@ -1,0 +1,49 @@
+require 'dotenv'
+Dotenv.load
+
+default_platform(:ios)
+
+platform :ios do
+  desc "iosテストアプリ配布"
+  lane :deploy do
+
+    project_name = "Runner.xcodeproj"
+    workspace_name = "Runner.xcworkspace" 
+    scheme_name = "Runner"
+    output_directory = "build"
+    ipa_path = "#{output_directory}/#{scheme_name}.ipa"
+    release_notes_file = ENV['PWD'] + "/fastlane/release_note.txt"
+
+    # flutter build
+    Dir.chdir "../.." do
+      sh("flutter", "clean")
+      sh("flutter", "pub", "get")
+      sh("flutter", "build", "ios", "--release", "--no-codesign")
+    end
+
+    # xcode archive
+    build_app(
+      workspace: workspace_name,
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          ENV['APP_IDENTIFIER'] => ENV['PROVISIONING'] 
+        },
+        signingStyle: "manual"
+      },
+      clean: true, 
+      export_xcargs: "-allowProvisioningUpdates", 
+      output_name: "#{scheme_name}.ipa",
+      output_directory: "#{output_directory}"
+    )
+
+    # deploy
+    firebase_app_distribution(
+      app: ENV['FIREBASE_APP_ID'], 
+      firebase_cli_token: ENV['FIREBASE_CLI_TOKEN'], 
+      ipa_path: ipa_path,
+      groups: ENV['GROUPS'],
+      release_notes_file: release_notes_file,
+    )
+  end
+end

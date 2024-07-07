@@ -1,0 +1,6 @@
+require 'dotenv'
+Dotenv.load
+
+app_identifier(ENV['APP_IDENTIFIER']) 
+apple_id(ENV['APPLE_ID']) 
+team_id(ENV['TEAM_ID']) 
